@@ -61,7 +61,9 @@ class Reader(Person):
                f' phone number {self.personal_phone}\n'
 
     def __eq__(self, other):
-        return self.readers_card == other.readers_card
+        return self.full_name == other.full_name and self.date_of_birth == other.date_of_birth \
+               and self.personal_phone == other.personal_phone \
+               # or self.readers_card == other.readers_card
 
 
 class Library:
@@ -76,7 +78,7 @@ class Library:
         self.library_phone = library_phone
         self.library_books = library_books
         self.readers = readers
-        self.readers_number = len(readers)
+        self.readers_number = len(self.readers)
 
     def __str__(self):
         return f'Library address: {self.address}, library phone: {self.library_phone}' \
@@ -84,6 +86,10 @@ class Library:
                f'readers:\n{"".join([str(r) for r in self.readers])}\n'
 
     def take_book(self, reader: Reader, book: Book):
+        if not isinstance(reader, Reader):
+            raise TypeError(f'Argument "reader" must be a Reader class, not {type(reader)}')
+        if not isinstance(book, Book):
+            raise TypeError(f'Argument "book" must be a Book class, not {type(book)}')
         if reader not in self.readers:
             return f'{reader.full_name} is not member of library'
         else:
@@ -95,6 +101,10 @@ class Library:
                 return f'{book.title} unavailable'
 
     def return_book(self, reader: Reader, book: Book):
+        if not isinstance(reader, Reader):
+            raise TypeError(f'Argument "reader" must be a Reader class, not {type(reader)}')
+        if not isinstance(book, Book):
+            raise TypeError(f'Argument "book" must be a Book class, not {type(book)}')
         if reader not in self.readers:
             return f'{reader.full_name} is not member of library'
         else:
@@ -106,6 +116,16 @@ class Library:
                 return f'{book.title} unavailable'
 
     def status(self):
+        if not isinstance(self.address, str):
+            raise TypeError(f'{self.address} should be string, not {type(self.address)}')
+        if not isinstance(self.library_phone, str):
+            raise TypeError(f'{self.library_phone} should be string, not {type(self.library_phone)}')
+        if not isinstance(self.readers, list):
+            raise TypeError(f'{self.readers} should be list of Reader, not {type(self.readers)}')
+        if not isinstance(self.library_books, list):
+            raise TypeError(f'{self.library_books} should be list of Book, not {type(self.library_books)}')
+        if self.address is None or self.library_phone is None or self.library_books is None or self.readers is None:
+            raise ValueError(f'All parameters of library should be defined')
         list_readers_books = []
         for reader in self.readers:
             if reader in self.readers:
@@ -113,28 +133,52 @@ class Library:
         return ''.join(map(str, list_readers_books))
 
     def add_book(self, book: Book):
+        if not isinstance(book, Book):
+            raise TypeError(f'Argument "book" must be a Book class, not {type(book)}')
         self.library_books.append(book)
         return f'{book.title} is added to library'
 
     def remove_book(self, book: Book):
+        if not isinstance(book, Book):
+            raise TypeError(f'Argument "book" must be a Book class, not {type(book)}')
         if book in self.library_books:
             self.library_books.remove(book)
-        return f'{book.title} is removed from library'
+            return f'{book.title} is removed from library'
+        else:
+            return f'{book.title} is not in library'
 
     def add_reader(self, person: Person):
+        if isinstance(person, Reader):
+            raise ValueError(f'Existing reader cant be re-registered')
+        if not isinstance(person, Person):
+            raise TypeError(f'Argument "person" must be a Person class, not {type(person)}')
+        if person in self.readers:
+            return f'{person.full_name} is already a library reader'
         readers_card = self.readers[-1].readers_card + 1
         readers_books = []
         person = Reader(person.full_name, readers_card, person.date_of_birth, person.personal_phone, readers_books)
         self.readers.append(person)
         self.readers_number += 1
-        return f'{person.full_name} is added to library readers'
+        return f'{person.full_name} is added to library readers with readers card number {person.readers_card}'
 
     def remove_reader(self, reader: Reader):
+        if isinstance(reader, Person):
+            raise ValueError(f'Unregistered person cant be removed from library readers')
+        if not isinstance(reader, Reader):
+            raise TypeError(f'Argument "reader" must be a Reader class, not {type(reader)}')
         if reader in self.readers:
             self.readers.remove(reader)
             self.readers_number -= 1
-        return f'{reader.full_name} is removed from library readers'
+            return f'{reader.full_name} is removed from library readers'
+        else:
+            return f'{reader.full_name} is not member of library'
 
+
+book1 = Book('comedy', 'Book Title 1', 'Author1')
+book2 = Book('drama', 'Book Title 2', 'Author2')
+book3 = Book('fantasy', 'Book Title 3', 'Author3')
+
+my_library = Library('some_address', 'some_number', [book1, book2, book3], [])
 
 if __name__ == "__main__":
     book1 = Book('comedy', 'Book Title 1', 'Author1')
