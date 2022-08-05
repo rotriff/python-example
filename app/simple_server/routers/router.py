@@ -1,9 +1,25 @@
 from app.classes.class_Library.class_Library import my_library
 
 routes = {
-    "library/books": {
-        "call": ''.join(map(str, my_library.library_books))
+    "GET": {
+        "/library": {
+            "call": str(my_library)
+        },
+        '/': {
+            "call": "my_project"
+        }
+    },
+    "POST": {
+        "/library/book": {
+            "call": my_library.add_book()
+        }
+    },
+    "DELETE": {
+        "/library/book": {
+            "call": my_library.remove_book()
+        }
     }
+
 }
 
 '''

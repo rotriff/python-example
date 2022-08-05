@@ -178,7 +178,11 @@ book1 = Book('comedy', 'Book Title 1', 'Author1')
 book2 = Book('drama', 'Book Title 2', 'Author2')
 book3 = Book('fantasy', 'Book Title 3', 'Author3')
 
-my_library = Library('some_address', 'some_number', [book1, book2, book3], [])
+reader1 = Reader("Name1", 1, "01.01.2001", "1111", [])
+reader2 = Reader("Name2", 2, "02.02.2002", "2222", [])
+reader3 = Reader("Name3", 3, "03.03.2003", "3333", [])
+
+my_library = Library('some_address', 'some_number', [book1, book2, book3], [reader1, reader2, reader3])
 
 if __name__ == "__main__":
     book1 = Book('comedy', 'Book Title 1', 'Author1')
@@ -193,6 +197,7 @@ if __name__ == "__main__":
     print(book1, book2, book3)
     print(reader1, reader2, reader3)
     print(library1)
+    print(library1.library_books)
     wtr = Book('comedy', 'Book Title 1', 'Author1')
     print(wtr in library1.library_books)
     print(library1.take_book(reader1, book1))
@@ -204,3 +209,4 @@ if __name__ == "__main__":
     print(library1.add_reader(reader4))
     print(library1.readers_number)
     print(library1.readers[3])
+

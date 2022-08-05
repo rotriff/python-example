@@ -1,4 +1,4 @@
-from routers.router import routes
+from app.simple_server.routers.router import routes
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 from http import HTTPStatus
@@ -17,9 +17,9 @@ class HttpGetHandler(BaseHTTPRequestHandler):
         self.send_header("Content-type", "application/json")
         self.end_headers()
         # self.wfile.write(open(dir_path + '/templates/home.html', 'r').read().encode())
-        if self.path in routes:
-            route_content = routes[self.path]['call']
-            self.wfile.write(json.dumps({'library_books': route_content}).encode())
+        if self.command in routes:
+            route_content = routes[self.command][self.path]['call']
+            self.wfile.write(json.dumps({'response': route_content}).encode())
         # self.wfile.write(json.dumps({'server_name': 'Simple HTTP server', 'author': 'Vova Taran'}).encode())
 
     def do_POST(self):
@@ -27,10 +27,20 @@ class HttpGetHandler(BaseHTTPRequestHandler):
         # self.send_header("Content-type", "text/html; charset=utf-8")
         self.send_header("Content-type", "application/json")
         self.end_headers()
+        if self.command in routes:
+            route_content = routes[self.command][self.path]['call']
+            self.wfile.write(json.dumps({'response': route_content}).encode())
         # self.wfile.write(open(dir_path + '/templates/home.html', 'r').read().encode())
-        # route_content = routes[self.path]
-        self.wfile.write(json.dumps({'server_name': 'Simple HTTP server',
-                                     'author': 'Vova Taran', 'path': self.path, 'method': self.command}).encode())
+        # self.wfile.write(json.dumps({'server_name': 'Simple HTTP server',
+        #                             'author': 'Vova Taran', 'path': self.path, 'method': self.command}).encode())
+
+    def do_DELETE(self):
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-type", "application/json")
+        self.end_headers()
+        if self.command in routes:
+            route_content = routes[self.command][self.path]['call']
+            self.wfile.write(json.dumps({'response': route_content}).encode())
 
 
 def run(server_class=HTTPServer, handler_class=HttpGetHandler):
