@@ -11,8 +11,11 @@ class Book:
     def __eq__(self, other):
         return self.genre == other.genre and self.title == other.title and self.author == other.author
 
-    def __str__(self):
-        return f'Book title {self.title}, genre {self.genre}, author {self.author}\n'
+    # def __str__(self):
+    #     return f'Book title {self.title}, genre {self.genre}, author {self.author}\n'
+
+    def __repr__(self):
+        return f'{self.title}, {self.genre}, {self.author}'
 
 
 '''
@@ -58,7 +61,11 @@ class Reader(Person):
 
     def __str__(self):
         return f'Full name {self.full_name}, readers card {self.readers_card}, date of birth {self.date_of_birth},' \
-               f' phone number {self.personal_phone}\n'
+               f' phone number {self.personal_phone}, books {self.readers_books}\n'
+
+    def __repr__(self):
+        return f'{self.full_name}, {self.readers_card}, {self.date_of_birth}, {self.personal_phone}, ' \
+               f'{self.readers_books}'
 
     def __eq__(self, other):
         return self.full_name == other.full_name and self.date_of_birth == other.date_of_birth \
@@ -82,8 +89,8 @@ class Library:
 
     def __str__(self):
         return f'Library address: {self.address}, library phone: {self.library_phone}' \
-               f'\nbooks:\n{"".join([str(x) for x in self.library_books])}' \
-               f'readers:\n{"".join([str(r) for r in self.readers])}\n'
+               f'\nbooks:\n{", ".join([str(x) for x in self.library_books])}\n' \
+               f'\nreaders:\n{"".join([str(r) for r in self.readers])}\n'
 
     def take_book(self, reader: Reader, book: Book):
         if not isinstance(reader, Reader):
@@ -154,7 +161,10 @@ class Library:
             raise TypeError(f'Argument "person" must be a Person class, not {type(person)}')
         if person in self.readers:
             return f'{person.full_name} is already a library reader'
-        readers_card = self.readers[-1].readers_card + 1
+        if self.readers == []:
+            readers_card = 1
+        else:
+            readers_card = self.readers[-1].readers_card + 1
         readers_books = []
         person = Reader(person.full_name, readers_card, person.date_of_birth, person.personal_phone, readers_books)
         self.readers.append(person)
@@ -182,7 +192,7 @@ reader1 = Reader("Name1", 1, "01.01.2001", "1111", [])
 reader2 = Reader("Name2", 2, "02.02.2002", "2222", [])
 reader3 = Reader("Name3", 3, "03.03.2003", "3333", [])
 
-my_library = Library('some_address', 'some_number', [book1, book2, book3], [reader1, reader2, reader3])
+my_library = Library('', '', [], [])
 
 if __name__ == "__main__":
     book1 = Book('comedy', 'Book Title 1', 'Author1')
@@ -194,19 +204,23 @@ if __name__ == "__main__":
     reader3 = Reader("Name3", 3, "03.03.2003", "3333", [])
 
     library1 = Library('a1b1', '094', [book1, book2, book3], [reader1, reader2, reader3])
-    print(book1, book2, book3)
-    print(reader1, reader2, reader3)
+    # print(book1, book2, book3)
+    # print(reader1, reader2, reader3)
+    # print(library1)
+    # print(library1.library_books)
+    # wtr = Book('comedy', 'Book Title 1', 'Author1')
+    # print(wtr in library1.library_books)
+    # print(library1.take_book(reader1, book1))
+    # print(library1.take_book(reader1, book2))
+    # print(library1.take_book(reader2, book3))
+    # print(library1.status())
+    # print(library1)
+    # reader4 = Person("Name4", "04.04.2004", "4444")
+    # print(library1.add_reader(reader4))
+    # print(library1.readers_number)
+    # print(library1.readers[3])
+    person1 = Person('person_name', '05.05.2005', '5555')
+    library1.add_reader(Person('person_name', '05.05.2005', '5555'))
+    library1.take_book(library1.readers[3], book1)
     print(library1)
-    print(library1.library_books)
-    wtr = Book('comedy', 'Book Title 1', 'Author1')
-    print(wtr in library1.library_books)
-    print(library1.take_book(reader1, book1))
-    print(library1.take_book(reader1, book2))
-    print(library1.take_book(reader2, book3))
-    print(library1.status())
-    print(library1)
-    reader4 = Person("Name4", "04.04.2004", "4444")
-    print(library1.add_reader(reader4))
-    print(library1.readers_number)
-    print(library1.readers[3])
 

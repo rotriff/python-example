@@ -71,6 +71,7 @@ def wrong_empty_phone():
     phone_we = Phone(None, None, None)
     return phone_we
 
+
 '''
 @pytest.mark.parametrize(
     "expected_exception, improper_object", [(TypeError, wrong_number_phone),

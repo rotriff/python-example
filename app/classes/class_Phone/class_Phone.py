@@ -29,7 +29,7 @@ class Phone:
         if not isinstance(self.weight, int):
             raise TypeError(f'Argument "weight" must be a integer, not {type(self.weight)}')
         if self.number is None or self.model is None or self.weight is None:
-            raise ValueError(f'All parameters of phone should be defined')
+            raise TypeError(f'All parameters of phone should be defined')
         return self.number
 
     def send_message(self, *numbers: str):
