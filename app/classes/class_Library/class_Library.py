@@ -67,7 +67,9 @@ class Reader(Person):
                f'{self.readers_books}'
 
     def __eq__(self, other):
-        return self.full_name == other.full_name and self.date_of_birth == other.date_of_birth and self.personal_phone == other.personal_phone and self.readers_card == other.readers_card and self.readers_books == other.readers_books
+        return self.full_name == other.full_name and self.date_of_birth == other.date_of_birth\
+               and self.personal_phone == other.personal_phone \
+               # and self.readers_card == other.readers_card and self.readers_books == other.readers_books
 
 
 class Library:
@@ -99,7 +101,8 @@ class Library:
         else:
             if book in self.library_books:
                 self.library_books.remove(book)
-                reader.readers_books.append(book)
+                self.readers[int(reader.readers_card) - 1].readers_books.append(book)
+                # reader.readers_books.append(book)
                 return f'{reader.full_name} took {book.title}'
             else:
                 return f'{book.title} unavailable'
@@ -112,8 +115,10 @@ class Library:
         if reader not in self.readers:
             return f'{reader.full_name} is not member of library'
         else:
-            if book in reader.readers_books:
-                reader.readers_books.remove(book)
+            if book in self.readers[int(reader.readers_card) - 1].readers_books:
+                # reader.readers_books:
+                # reader.readers_books.remove(book)
+                self.readers[int(reader.readers_card) - 1].readers_books.remove(book)
                 self.library_books.append(book)
                 return f'{reader.full_name} returned {book.title}'
             else:
@@ -218,9 +223,9 @@ if __name__ == "__main__":
     # print(library1.readers[3])
     person1 = Person('person_name', '05.05.2005', '5555')
     print(library1.add_reader(Person('person_name', '05.05.2005', '5555')))
-    # library1.take_book(library1.readers[3], book1)
+    library1.take_book(library1.readers[3], book1)
     print(library1.take_book(Reader("person_name", 4, '05.05.2005', '5555'), Book('drama', 'Book Title 2', 'Author2')))
-    # print(library1.return_book(library1.readers[3], book2))
+    print(library1.return_book(Reader("person_name", 4, '05.05.2005', '5555'), book2))
     # print(Reader("person_name", 4, '05.05.2005', '5555') is library1.readers[3])
     # print(Book('fantasy', 'Book Title 3', 'Author3') is library1.library_books[0])
     # print(Book('fantasy', 'Book Title 3', 'Author3') is book3)
