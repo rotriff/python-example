@@ -11,8 +11,8 @@ class Book:
     def __eq__(self, other):
         return self.genre == other.genre and self.title == other.title and self.author == other.author
 
-    # def __str__(self):
-    #     return f'Book title {self.title}, genre {self.genre}, author {self.author}\n'
+    def __str__(self):
+        return f'Book title {self.title}, genre {self.genre}, author {self.author}\n'
 
     def __repr__(self):
         return f'{self.title}, {self.genre}, {self.author}'
@@ -53,11 +53,10 @@ class Reader(Person):
     readers_card: int = None
     readers_books: list[Book] = []
 
-    def __init__(self, full_name: str, readers_card: int, date_of_birth: str, personal_phone: str,
-                 readers_books: list[Book]):
+    def __init__(self, full_name: str, readers_card: int, date_of_birth: str, personal_phone: str):
         super().__init__(full_name, date_of_birth, personal_phone)
         self.readers_card = readers_card
-        self.readers_books = readers_books
+        self.readers_books = []
 
     def __str__(self):
         return f'Full name {self.full_name}, readers card {self.readers_card}, date of birth {self.date_of_birth},' \
@@ -68,9 +67,7 @@ class Reader(Person):
                f'{self.readers_books}'
 
     def __eq__(self, other):
-        return self.full_name == other.full_name and self.date_of_birth == other.date_of_birth \
-               and self.personal_phone == other.personal_phone \
-               # or self.readers_card == other.readers_card
+        return self.full_name == other.full_name and self.date_of_birth == other.date_of_birth and self.personal_phone == other.personal_phone and self.readers_card == other.readers_card and self.readers_books == other.readers_books
 
 
 class Library:
@@ -166,7 +163,7 @@ class Library:
         else:
             readers_card = self.readers[-1].readers_card + 1
         readers_books = []
-        person = Reader(person.full_name, readers_card, person.date_of_birth, person.personal_phone, readers_books)
+        person = Reader(person.full_name, readers_card, person.date_of_birth, person.personal_phone)
         self.readers.append(person)
         self.readers_number += 1
         return f'{person.full_name} is added to library readers with readers card number {person.readers_card}'
@@ -188,9 +185,9 @@ book1 = Book('comedy', 'Book Title 1', 'Author1')
 book2 = Book('drama', 'Book Title 2', 'Author2')
 book3 = Book('fantasy', 'Book Title 3', 'Author3')
 
-reader1 = Reader("Name1", 1, "01.01.2001", "1111", [])
-reader2 = Reader("Name2", 2, "02.02.2002", "2222", [])
-reader3 = Reader("Name3", 3, "03.03.2003", "3333", [])
+reader1 = Reader("Name1", 1, "01.01.2001", "1111")
+reader2 = Reader("Name2", 2, "02.02.2002", "2222")
+reader3 = Reader("Name3", 3, "03.03.2003", "3333")
 
 my_library = Library('', '', [], [])
 
@@ -199,9 +196,9 @@ if __name__ == "__main__":
     book2 = Book('drama', 'Book Title 2', 'Author2')
     book3 = Book('fantasy', 'Book Title 3', 'Author3')
 
-    reader1 = Reader("Name1", 1, "01.01.2001", "1111", [])
-    reader2 = Reader("Name2", 2, "02.02.2002", "2222", [])
-    reader3 = Reader("Name3", 3, "03.03.2003", "3333", [])
+    reader1 = Reader("Name1", 1, "01.01.2001", "1111")
+    reader2 = Reader("Name2", 2, "02.02.2002", "2222")
+    reader3 = Reader("Name3", 3, "03.03.2003", "3333")
 
     library1 = Library('a1b1', '094', [book1, book2, book3], [reader1, reader2, reader3])
     # print(book1, book2, book3)
@@ -220,7 +217,14 @@ if __name__ == "__main__":
     # print(library1.readers_number)
     # print(library1.readers[3])
     person1 = Person('person_name', '05.05.2005', '5555')
-    library1.add_reader(Person('person_name', '05.05.2005', '5555'))
-    library1.take_book(library1.readers[3], book1)
+    print(library1.add_reader(Person('person_name', '05.05.2005', '5555')))
+    # library1.take_book(library1.readers[3], book1)
+    print(library1.take_book(Reader("person_name", 4, '05.05.2005', '5555'), Book('drama', 'Book Title 2', 'Author2')))
+    # print(library1.return_book(library1.readers[3], book2))
+    # print(Reader("person_name", 4, '05.05.2005', '5555') is library1.readers[3])
+    # print(Book('fantasy', 'Book Title 3', 'Author3') is library1.library_books[0])
+    # print(Book('fantasy', 'Book Title 3', 'Author3') is book3)
+    # print(book3 is library1.library_books[0])
+    # print(Book('fantasy', 'Book Title 3', 'Author3') in library1.library_books)
     print(library1)
 
