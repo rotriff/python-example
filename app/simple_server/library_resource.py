@@ -3,7 +3,8 @@ from http import HTTPStatus
 from app.simple_server.routers.router import Handler
 from app.classes.class_Library.class_Library import Library, Book, Person, Reader
 from typing import Callable
-
+import psycopg2
+from library_config import *
 
 class LibraryResource:
     _library: Library = None
@@ -80,7 +81,44 @@ class LibraryResource:
 
     def add_book(self, req: Handler):
         func = self._library.add_book
-        self._unifunc(HTTPStatus.OK, "application/json", req, func)
+        length = int(req.headers.get('content-length'))
+        body = req.rfile.read(length)
+        decoded_body = body.decode()
+        data = json.loads(decoded_body)
+        book = (Book(data['genre'], data['title'], data['author']))
+        # func(book)
+        try:
+            connection = psycopg2.connect(
+                host=host,
+                user=user,
+                password=password,
+                database=db_name
+            )
+            connection.autocommit = True
+
+            #         insert data into table
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """INSERT INTO public."Libraries" (genre, title, author) VALUES
+                    ('data['genre']', 'data['title']', 'data['author']');"""
+                )
+                # connection.commit()
+                print("(INFO) Data was successfully inserted")
+
+        except Exception as _ex:
+            print("(INFO) Error while working with PosstgreSQL", _ex)
+        finally:
+            if connection:
+                # cursor.close()
+                connection.close()
+                print("(INFO) PostgreSQL connection closed")
+        req.send_response(HTTPStatus.OK)
+        req.send_header("content-type", "application/json")
+        req.end_headers()
+        req.wfile.write(
+            json.dumps({'server_name': 'Library HTTP server', 'author': 'Vova Taran', 'path': req.path,
+                        'method': req.command,
+                        'function response': 'book added'}).encode())
 
     def remove_book(self, req: Handler):
         func = self._library.remove_book
@@ -93,3 +131,9 @@ class LibraryResource:
     def remove_reader(self, req: Handler):
         func = self._library.remove_reader
         self._unifunc(HTTPStatus.OK, "application/json", req, func)
+
+
+
+
+
+

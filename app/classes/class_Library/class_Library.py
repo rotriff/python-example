@@ -174,8 +174,6 @@ class Library:
         return f'{person.full_name} is added to library readers with readers card number {person.readers_card}'
 
     def remove_reader(self, reader: Reader):
-        if isinstance(reader, Person):
-            raise ValueError(f'Unregistered person cant be removed from library readers')
         if not isinstance(reader, Reader):
             raise TypeError(f'Argument "reader" must be a Reader class, not {type(reader)}')
         if reader in self.readers:
@@ -194,7 +192,7 @@ reader1 = Reader("Name1", 1, "01.01.2001", "1111")
 reader2 = Reader("Name2", 2, "02.02.2002", "2222")
 reader3 = Reader("Name3", 3, "03.03.2003", "3333")
 
-my_library = Library('', '', [], [])
+my_library = Library('Address st. 1', '8 800 555 3535', [], [])
 
 if __name__ == "__main__":
     book1 = Book('comedy', 'Book Title 1', 'Author1')
