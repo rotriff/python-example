@@ -5,3 +5,5 @@ def replace_one(phrase: str):
         if character == "1":
             new_phrase = phrase.replace("1", "one")
             return new_phrase
+        else:
+            return phrase
